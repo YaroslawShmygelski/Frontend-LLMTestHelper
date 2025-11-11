@@ -8,24 +8,21 @@ import { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import { useLoginUserMutation } from "../api/authApi";
-export interface LoginRequest {
-    username: string;
-    password: string;
-}
+import type { LoginRequest } from "../types/authTypes";
 
 export const LoginForm = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const [loginUser, {isLoading, error}] = useLoginUserMutation();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-        console.log(login, password)
-        const credentials: LoginRequest = { username: login, password };
-        await loginUser(credentials).unwrap();
+      console.log(login, password);
+      const credentials: LoginRequest = { username: login, password: password };
+      await loginUser(credentials).unwrap();
     } catch (err) {
       alert(err);
     }
@@ -82,9 +79,8 @@ export const LoginForm = () => {
         >
           Sign In
         </button>
-          {isLoading && <h1>LOADING...</h1>}
-          {error && <p>Error logging in: {JSON.stringify(error)}</p>}
-
+        {isLoading && <h1>LOADING...</h1>}
+        {error && <p>Error logging in: {JSON.stringify(error)}</p>}
       </form>
     </div>
   );

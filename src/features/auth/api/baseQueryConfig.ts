@@ -4,9 +4,8 @@ import {
   type FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { tokenService } from "../services/tokenService";
-import {baseQuery} from "@/api/LLMTestHelperApi"
+import { baseQuery } from "@/api/LLMTestHelperApi";
 import { logout, setCredentials } from "../state/authSlice";
-
 
 // Decorator of built-in base Query option in RTKQ createAPI
 export const baseQueryWithReAuth: BaseQueryFn<
