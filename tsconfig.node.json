@@ -6,6 +6,12 @@
     "module": "ESNext",
     "types": ["node"],
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -22,5 +28,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["*.ts", "config/**/*.ts"]
 }
