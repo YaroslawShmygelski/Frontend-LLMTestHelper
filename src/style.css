@@ -1,1 +1,85 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@layer base {
+  /* 1. Light Theme */
+  :root {
+    /* Background colors */
+    --background: #d9d9db; /* Olive Green background */
+    --card: #ffffff; /* White card surfaces */
+
+    /* Text / Foreground */
+    --foreground: #020817; /* Dark text on light background */
+    --card-foreground: #020817; /* Text on cards */
+
+    /* Primary colors */
+    --primary: #a855f7; /* Blue-700, main buttons, highlights */
+    --primary-dark: #371656;
+    --primary-foreground: #eff6ff; /* Text on primary buttons */
+
+    /* Muted / secondary */
+    --muted: #f1f5f9; /* Light gray background surfaces */
+    --muted-foreground: #64748b; /* Gray text on muted surfaces */
+
+    /* Borders */
+    --border: rgba(107, 114, 128, 0.6); /* Gray-500 with 60% opacity */
+
+    /* Focus / Highlight */
+    --focus: #1e40af; /* Purple-500, used for underline focus */
+    --focus-dark: #050e2b;
+
+    /* Placeholder */
+    --placeholder: #9ca3af; /* Gray-400 placeholder text */
+  }
+
+  /* 2. Dark Theme */
+  .dark {
+    /* Background colors */
+    --background: #020817; /* Dark main background */
+    --card: #0f172a; /* Card surfaces in dark mode */
+
+    /* Text / Foreground */
+    --foreground: #f8fafc; /* Light text on dark background */
+    --card-foreground: #f8fafc; /* Text on cards in dark mode */
+
+    /* Primary colors */
+    --primary: #a855f7; /* Light blue for primary buttons */
+    --primary-dark: #291040;
+    --primary-foreground: #eff6ff; /* Text on primary buttons in dark mode */
+
+    /* Muted / secondary */
+    --muted: #0f172a; /* Dark gray background surfaces */
+    --muted-foreground: #94a3b8; /* Gray text on muted surfaces */
+
+    /* Borders */
+    --border: rgba(107, 114, 128, 0.6); /* Same gray border with 60% opacity */
+
+    /* Focus / Highlight */
+    --focus: #1e40af; /* Purple-500, consistent with light mode */
+    --focus-dark: #152455;
+
+    /* Placeholder */
+    --placeholder: #6b7280; /* Gray-500 placeholder text in dark mode */
+  }
+}
+
+.btn-gradient {
+  @apply bg-gradient-to-r from-primary to-focus
+         hover:from-focus-dark hover:to-primary-dark
+         transition-colors duration-300;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-focus: var(--focus);
+  --color-focus-dark: var(--focus-dark);
+  --color-placeholder: var(--placeholder);
+}

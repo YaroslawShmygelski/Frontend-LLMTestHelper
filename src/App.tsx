@@ -1,12 +1,14 @@
-import { LoginForm } from "@/features/auth/components/LoginForm";
+// App.tsx
+import { LoginForm } from '@/features/auth/components/LoginForm';
+import { ThemeToggler } from '@/components/ThemeToggler';
+import { useTheme } from '@/hooks/useTheme';
 
 export const App = () => {
+  const { theme, toggleTheme } = useTheme();
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card text-4xl p-64 text-green-600">
-        <LoginForm />
-      </div>
-    </>
+    <div className="min-h-screen flex flex-col bg-background items-center justify-center p-6 transition-colors duration-500">
+      <ThemeToggler theme={theme} toggleTheme={toggleTheme} />
+      <LoginForm />
+    </div>
   );
 };

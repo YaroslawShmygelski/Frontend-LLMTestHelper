@@ -1,87 +1,114 @@
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import FormControl from "@mui/material/FormControl";
-import { useState } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import Input from "@mui/material/Input";
-import { useLoginUserMutation } from "../api/authApi";
-import type { LoginRequest } from "../types/authTypes";
+// LoginForm.tsx
+import { useState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useLoginUserMutation } from '../api/authApi';
+import type { LoginRequest } from '../types/authTypes';
 
 export const LoginForm = () => {
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
+
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
+  const handleMouseDownPassword = (e: React.MouseEvent<HTMLButtonElement>) =>
+    e.preventDefault();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const credentials: LoginRequest = { username: login, password };
     try {
-      console.log(login, password);
-      const credentials: LoginRequest = { username: login, password: password };
       await loginUser(credentials).unwrap();
     } catch (err) {
-      alert(err);
+      console.error(err);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <form
-        className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md"
-        onSubmit={handleSubmit}
+    <form
+      onSubmit={handleSubmit}
+      className="bg-card dark:bg-card rounded-xl p-8 m-4 shadow-xl"
+    >
+      <h2
+        className="text-3xl font-bold mb-8 text-center 
+                 text-foreground dark:text-foreground"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
+        Login
+      </h2>
 
-        <div className="flex flex-col gap-4">
-          <TextField
-            id="login"
-            label="Login"
-            variant="standard"
-            fullWidth
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-          />
-          <FormControl variant="standard">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <Input
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label={
-                      showPassword
-                        ? "hide the password"
-                        : "display the password"
-                    }
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-        </div>
+      <div className="flex flex-col gap-6">
+        <TextField
+          id="login"
+          label="Login"
+          variant="standard"
+          fullWidth
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
+          InputLabelProps={{
+            className: '!text-foreground !dark:text-foreground',
+          }}
+          InputProps={{
+            className: '!text-foreground !dark:text-foreground',
+          }}
+        />
 
+        <TextField
+          id="password"
+          label="Password"
+          variant="standard"
+          fullWidth
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          InputLabelProps={{
+            className: '!text-foreground !dark:text-foreground',
+          }}
+          InputProps={{
+            className: '!text-foreground !dark:text-foreground',
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? (
+                    <VisibilityOff className="!text-foreground !dark:text-foreground" />
+                  ) : (
+                    <Visibility className="!text-foreground !dark:text-foreground" />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </div>
+
+      <div className="mt-8">
         <button
           type="submit"
-          className="mt-6 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+          disabled={isLoading}
+          className="w-full py-3 px-4 rounded-xl font-semibold text-lg text-white btn-gradient"
         >
-          Sign In
+          {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
         </button>
-        {isLoading && <h1>LOADING...</h1>}
-        {error && <p>Error logging in: {JSON.stringify(error)}</p>}
-      </form>
-    </div>
+      </div>
+
+      {isLoading && (
+        <p className="text-center text-muted dark:text-muted-foreground mt-4 font-medium">
+          Loading...
+        </p>
+      )}
+      {error && (
+        <p className="text-center text-error mt-4 font-medium">
+          Error: {JSON.stringify(error)}
+        </p>
+      )}
+    </form>
   );
 };
