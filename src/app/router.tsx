@@ -7,6 +7,7 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ProtectedRoute } from '@/utils/ProtectedRoute';
 import { PublicRoute } from '@/utils/PublicRoute';
+import { TestUpload } from './pages/TestUpload';
 
 const AppRootErrorBoundary = () => <div> ERROR!</div>;
 
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Layout>
-          <div>You are logged in</div>
+          <TestUpload />
         </Layout>
       </ProtectedRoute>
     ),
