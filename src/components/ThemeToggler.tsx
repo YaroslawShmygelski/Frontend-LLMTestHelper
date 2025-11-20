@@ -9,7 +9,7 @@ interface ThemeTogglerProps {
   toggleTheme: (theme?: 'light' | 'dark') => void;
 }
 
-export const ThemeToggler: ThemeTogglerProps = ({ theme, toggleTheme }) => {
+export const ThemeToggler = ({ theme, toggleTheme }: ThemeTogglerProps) => {
   return (
     <div className="relative flex w-fit items-center rounded-full">
       <button

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem('theme') || 'light'
-  );
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const stored = localStorage.getItem('theme');
+    return stored === 'dark' ? 'dark' : 'light';
+  });
 
   useEffect(() => {
     const root = window.document.documentElement;

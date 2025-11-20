@@ -29,6 +29,8 @@
 
     /* Placeholder */
     --placeholder: #9ca3af; /* Gray-400 placeholder text */
+
+    --error: #c90707;
   }
 
   /* 2. Dark Theme */
@@ -80,6 +82,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-focus: var(--focus);
+  --color-error: var(--error);
   --color-focus-dark: var(--focus-dark);
   --color-placeholder: var(--placeholder);
 }

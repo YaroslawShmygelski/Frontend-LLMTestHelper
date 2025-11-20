@@ -15,3 +15,16 @@ export interface LoginRequest {
 export interface LoginResponse {
   accessToken: string;
 }
+
+export interface RegisterRequest {
+  first_name: string;
+  last_name: string;
+  email: string;
+  country_code: number;
+  phone_number: number;
+  password: string;
+}
+
+export interface RegisterResponse {
+  userId: number;
+}
