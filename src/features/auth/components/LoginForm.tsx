@@ -9,19 +9,11 @@ import { CustomButton } from '@/components/CustomButton';
 import { ErrorAlert } from '@/components/ErrorAlert';
 import { CustomTextField } from './CustomTextField';
 import { CustomPasswordField } from './CustomPasswordField';
+import type { ApiErrorResponse } from '@/types/types';
 
 interface FormErrors {
   login?: string;
   password?: string;
-}
-
-interface ApiErrorResponse {
-  data?: {
-    message?: string;
-    error?: string;
-  };
-  status?: number;
-  message?: string;
 }
 
 export const LoginForm = () => {

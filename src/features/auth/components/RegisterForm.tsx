@@ -9,6 +9,7 @@ import { CustomButton } from '@/components/CustomButton';
 import { ErrorAlert } from '@/components/ErrorAlert';
 import { CustomTextField } from './CustomTextField';
 import { CustomPasswordField } from './CustomPasswordField';
+import type { ApiErrorResponse } from '@/types/types';
 
 interface FormErrors {
   firstName?: string;
@@ -18,15 +19,6 @@ interface FormErrors {
   phoneNumber?: string;
   password?: string;
   repeatPassword?: string;
-}
-
-interface ApiErrorResponse {
-  data?: {
-    message?: string;
-    error?: string;
-  };
-  status?: number;
-  message?: string;
 }
 
 export const RegisterForm = () => {

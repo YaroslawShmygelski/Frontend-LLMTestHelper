@@ -42,9 +42,8 @@ export const authApi = LLMTestHelperApi.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const registerResult = await queryFulfilled; // RegisterResponse { userId }
+          const registerResult = await queryFulfilled;
           console.log(registerResult);
-          // После регистрации логинимся, чтобы получить токен
           const loginResponse = await dispatch(
             authApi.endpoints.loginUser.initiate({
               username: arg.email,

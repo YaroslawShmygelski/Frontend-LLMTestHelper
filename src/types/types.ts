@@ -3,3 +3,12 @@ export interface User {
   name: string;
   email: string;
 }
+
+export interface ApiErrorResponse {
+  data?: {
+    message?: string;
+    error?: string;
+  };
+  status?: number;
+  message?: string;
+}
