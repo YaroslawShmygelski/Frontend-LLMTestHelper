@@ -1,119 +1,151 @@
-// LoginForm.tsx
 import { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router';
+import LoginIcon from '@mui/icons-material/Login';
+
 import { useLoginUserMutation } from '../api/authApi';
 import type { LoginRequest } from '../types/authTypes';
-import { useNavigate } from 'react-router';
 import { paths } from '@/utils/paths';
+import { CustomButton } from '@/components/CustomButton';
+import { ErrorAlert } from '@/components/ErrorAlert';
+import { CustomTextField } from './CustomTextField';
+import { CustomPasswordField } from './CustomPasswordField';
+
+interface FormErrors {
+  login?: string;
+  password?: string;
+}
+
+interface ApiErrorResponse {
+  data?: {
+    message?: string;
+    error?: string;
+  };
+  status?: number;
+  message?: string;
+}
 
 export const LoginForm = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [globalError, setGlobalError] = useState<string | null>(null);
+
+  const [loginUser, { isLoading }] = useLoginUserMutation();
   const navigate = useNavigate();
 
-  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
-  const handleMouseDownPassword = (e: React.MouseEvent<HTMLButtonElement>) =>
-    e.preventDefault();
+  const getErrorMessage = (error: unknown): string => {
+    if (!error) return 'An unexpected error occurred';
+
+    const err = error as ApiErrorResponse;
+
+    if (err.data && typeof err.data === 'object') {
+      return err.data.message || err.data.error || 'Invalid credentials';
+    }
+
+    if (err.message) {
+      return err.message;
+    }
+
+    return 'Network error or server unavailable';
+  };
+
+  const validate = (): boolean => {
+    const errors: FormErrors = {};
+    let isValid = true;
+
+    if (!login.trim()) {
+      errors.login = 'Login is required';
+      isValid = false;
+    }
+
+    if (!password.trim()) {
+      errors.password = 'Password is required';
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setGlobalError(null);
+
+    if (!validate()) return;
+
     const credentials: LoginRequest = { username: login, password };
+
     try {
       await loginUser(credentials).unwrap();
       navigate(paths.app.root.path, { replace: true });
     } catch (err) {
-      console.error(err);
+      const message = getErrorMessage(err);
+      setGlobalError(message);
     }
   };
 
   return (
-    <div className="p-24 bg-card rounded-xl shadow-xl">
-      <form onSubmit={handleSubmit}>
-        <h2
-          className="text-3xl font-bold mb-8 text-center 
-                 text-foreground dark:text-foreground"
-        >
-          Login
-        </h2>
+    <>
+      <ErrorAlert message={globalError} onClose={() => setGlobalError(null)} />
 
-        <div className="flex flex-col gap-6">
-          <TextField
-            id="login"
-            label="Login"
-            variant="standard"
-            fullWidth
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            InputLabelProps={{
-              className: '!text-foreground !dark:text-foreground',
-            }}
-            InputProps={{
-              className: '!text-foreground !dark:text-foreground',
-            }}
-          />
+      <div className="flex justify-center items-center min-h-[70vh] px-4 py-12">
+        <div className="w-full max-w-lg sm:max-w-xl bg-card rounded-3xl shadow-2xl border border-card-foreground/5 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-transparent via-primary/50 to-transparent opacity-80" />
 
-          <TextField
-            id="password"
-            label="Password"
-            variant="standard"
-            fullWidth
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            InputLabelProps={{
-              className: '!text-foreground !dark:text-foreground',
-            }}
-            InputProps={{
-              className: '!text-foreground !dark:text-foreground',
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                    aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
-                    }
-                  >
-                    {showPassword ? (
-                      <VisibilityOff className="!text-foreground !dark:text-foreground" />
-                    ) : (
-                      <Visibility className="!text-foreground !dark:text-foreground" />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          <div className="p-8 sm:p-14 flex flex-col gap-8 relative z-10">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight">
+                Welcome Back
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                Enter your details to access your workspace
+              </p>
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col gap-8 mt-4"
+            >
+              <CustomTextField
+                id="login"
+                label="Login"
+                value={login}
+                error={!!formErrors.login}
+                helperText={formErrors.login}
+                onChange={(e) => {
+                  setLogin(e.target.value);
+                  if (formErrors.login)
+                    setFormErrors({ ...formErrors, login: undefined });
+                }}
+              ></CustomTextField>
+              <CustomPasswordField
+                id="password"
+                label="Password"
+                value={password}
+                error={!!formErrors.password}
+                helperText={formErrors.password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (formErrors.password)
+                    setFormErrors({ ...formErrors, password: undefined });
+                }}
+              />
+
+              <div className="pt-4">
+                <CustomButton
+                  type="submit"
+                  isLoading={isLoading}
+                  loadingText="Logging In..."
+                  icon={<LoginIcon />}
+                >
+                  Log In
+                </CustomButton>
+              </div>
+            </form>
+          </div>
         </div>
-
-        <div className="mt-8">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-3 px-4 rounded-xl font-semibold text-lg text-white btn-gradient"
-          >
-            {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
-          </button>
-        </div>
-
-        {isLoading && (
-          <p className="text-center text-muted dark:text-muted-foreground mt-4 font-medium">
-            Loading...
-          </p>
-        )}
-        {error && (
-          <p className="text-center text-error mt-4 font-medium">
-            Error: {JSON.stringify(error)}
-          </p>
-        )}
-      </form>
-    </div>
+      </div>
+    </>
   );
 };

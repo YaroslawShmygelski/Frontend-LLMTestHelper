@@ -1,4 +1,4 @@
-import { TestUploadForm } from '@/features/auth/tests/components/TestUploadForm';
+import { TestUploadForm } from '@/features/tests/components/TestUploadForm';
 
 export const TestUpload = () => {
   return (

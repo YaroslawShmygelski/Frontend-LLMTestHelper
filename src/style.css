@@ -65,7 +65,7 @@
 }
 
 .btn-gradient {
-  @apply bg-gradient-to-r from-primary to-focus
+  @apply bg-linear-to-r from-primary to-focus
          hover:from-focus-dark hover:to-primary-dark
          transition-colors duration-300;
 }
