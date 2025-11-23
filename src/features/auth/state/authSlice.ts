@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit/react";
-import { tokenService } from "../services/tokenService";
+import { createSlice } from '@reduxjs/toolkit/react';
+import { tokenService } from '../utils/tokenService';
 
 interface AuthState {
   accessToken: string | null;
@@ -12,7 +12,7 @@ const initialState: AuthState = {
 };
 
 const AuthSlice = createSlice({
-  name: "AuthSlice",
+  name: 'AuthSlice',
   initialState,
   reducers: {
     setCredentials: (state, action) => {

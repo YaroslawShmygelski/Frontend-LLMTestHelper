@@ -16,20 +16,11 @@ export const paths = {
     root: {
       path: '/app',
     },
-    uploadTest: {
-      path: '',
-    },
-    myTests: {
-      path: 'user/:test',
-    },
-    discussion: {
-      path: 'discussions/:discussionId',
-    },
-    users: {
-      path: 'users',
+    getTestOverview: {
+      path: '/test/:id',
     },
     profile: {
-      path: 'profile',
+      path: '/profile',
     },
   },
 };

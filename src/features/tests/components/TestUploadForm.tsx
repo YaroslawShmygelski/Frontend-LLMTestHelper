@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router';
 import { FiLink, FiUpload, FiCheckCircle } from 'react-icons/fi';
-import { ErrorAlert } from '@/components/ErrorAlert';
+import { StatusAlert } from '@/components/StatusAlert';
 import { CustomButton } from '@/components/CustomButton';
 import { useUploadTestMutation } from '../api/testApi';
-import type { UploadTestRequest } from '../types/testTypes';
+import type { UploadTestRequest } from '../types/apiTypes';
 
 interface ApiErrorResponse {
   data?: {
@@ -13,23 +14,45 @@ interface ApiErrorResponse {
 }
 
 export const TestUploadForm = () => {
+  const navigate = useNavigate();
+
   const [testLink, setTestLink] = useState<string>('');
   const [validationError, setValidationError] = useState<string | null>(null);
+
+  const [successTestId, setSuccessTestId] = useState<number | null>(null);
+
   const [isFocused, setIsFocused] = useState(false);
   const [uploadTest, { isLoading, error: apiError }] = useUploadTestMutation();
 
-  const getErrorMessage = () => {
+  const getAlertMessage = () => {
+    if (successTestId) return 'Test uploaded successfully!';
     if (validationError) return validationError;
-
     if (apiError) {
       const err = apiError as ApiErrorResponse;
-
-      if (err.data && err.data.message) {
-        return err.data.message;
-      }
+      if (err.data && err.data.message) return err.data.message;
       return 'Failed to upload test. Server error.';
     }
     return null;
+  };
+
+  const getAlertType = () => {
+    if (successTestId) return 'success';
+    return 'error';
+  };
+
+  const handleAlertClose = () => {
+    if (successTestId) {
+      navigate(`/test/${successTestId}`);
+      setSuccessTestId(null);
+    } else {
+      setValidationError(null);
+    }
+  };
+
+  const handleSuccessAction = () => {
+    if (successTestId) {
+      navigate(`/test/${successTestId}`);
+    }
   };
 
   const isValidGoogleForm = (url: string) => {
@@ -51,14 +74,17 @@ export const TestUploadForm = () => {
     }
 
     setValidationError(null);
+    setSuccessTestId(null);
 
     try {
       const payload: UploadTestRequest = { test_url: testLink };
       const response = await uploadTest(payload).unwrap();
 
-      console.log('Uploaded ID:', response);
+      const newId = response.testId;
+
+      console.log('Uploaded ID:', newId);
       setTestLink('');
-      alert('Test uploaded successfully!');
+      setSuccessTestId(newId);
     } catch (err) {
       console.error('Upload failed:', err);
     }
@@ -66,15 +92,20 @@ export const TestUploadForm = () => {
 
   return (
     <>
-      <ErrorAlert
-        message={getErrorMessage()}
-        onClose={() => setValidationError(null)}
+      <StatusAlert
+        message={getAlertMessage()}
+        type={getAlertType()}
+        onClose={handleAlertClose}
+        action={
+          successTestId
+            ? { label: 'Open Test', onClick: handleSuccessAction }
+            : undefined
+        }
       />
 
       <div className="w-full px-4 py-6 sm:py-10 flex justify-center items-center min-h-[60vh]">
         <div className="w-full max-w-3xl bg-card rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-12 border border-card-foreground/10 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 sm:h-2 bg-linear-to-r from-transparent via-card-foreground/20 to-transparent opacity-50" />
-
           <div className="flex flex-col items-center relative z-10">
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-card-foreground mb-3 sm:mb-4 text-center tracking-tight leading-tight">
               Paste Your Google Form Link

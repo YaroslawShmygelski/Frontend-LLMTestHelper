@@ -2,10 +2,10 @@ import {
   type BaseQueryFn,
   type FetchArgs,
   type FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
-import { tokenService } from "../services/tokenService";
-import { baseQuery } from "@/api/LLMTestHelperApi";
-import { logout, setCredentials } from "../state/authSlice";
+} from '@reduxjs/toolkit/query/react';
+import { tokenService } from '../utils/tokenService';
+import { baseQuery } from '@/api/LLMTestHelperApi';
+import { logout, setCredentials } from '../state/authSlice';
 
 // Decorator of built-in base Query option in RTKQ createAPI
 export const baseQueryWithReAuth: BaseQueryFn<
@@ -18,9 +18,9 @@ export const baseQueryWithReAuth: BaseQueryFn<
   if (result.error && result.error.status === 401) {
     // Request to refresh endpoint
     const refreshResult = await baseQuery(
-      { url: "auth/refresh", method: "POST" },
+      { url: 'auth/refresh', method: 'POST' },
       store,
-      extraOptions,
+      extraOptions
     );
     if (refreshResult?.data) {
       const { accessToken } = refreshResult.data as { accessToken: string };

@@ -6,10 +6,10 @@ import { useLoginUserMutation } from '../api/authApi';
 import type { LoginRequest } from '../types/authTypes';
 import { paths } from '@/utils/paths';
 import { CustomButton } from '@/components/CustomButton';
-import { ErrorAlert } from '@/components/ErrorAlert';
+import { StatusAlert } from '@/components/StatusAlert';
 import { CustomTextField } from './CustomTextField';
 import { CustomPasswordField } from './CustomPasswordField';
-import type { ApiErrorResponse } from '@/types/types';
+import { getErrorMessage } from '../utils/tokenService';
 
 interface FormErrors {
   login?: string;
@@ -24,22 +24,6 @@ export const LoginForm = () => {
 
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const navigate = useNavigate();
-
-  const getErrorMessage = (error: unknown): string => {
-    if (!error) return 'An unexpected error occurred';
-
-    const err = error as ApiErrorResponse;
-
-    if (err.data && typeof err.data === 'object') {
-      return err.data.message || err.data.error || 'Invalid credentials';
-    }
-
-    if (err.message) {
-      return err.message;
-    }
-
-    return 'Network error or server unavailable';
-  };
 
   const validate = (): boolean => {
     const errors: FormErrors = {};
@@ -78,7 +62,7 @@ export const LoginForm = () => {
 
   return (
     <>
-      <ErrorAlert message={globalError} onClose={() => setGlobalError(null)} />
+      <StatusAlert message={globalError} onClose={() => setGlobalError(null)} />
 
       <div className="flex justify-center items-center min-h-[70vh] px-4 py-12">
         <div className="w-full max-w-lg sm:max-w-xl bg-card rounded-3xl shadow-2xl border border-card-foreground/5 relative overflow-hidden">

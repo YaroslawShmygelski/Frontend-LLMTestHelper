@@ -1,5 +1,10 @@
 import { LLMTestHelperApi } from '@/api/LLMTestHelperApi';
-import type { UploadTestRequest, UploadTestResponse } from '../types/testTypes';
+import type { FullTestResponse } from '../types/testTypes';
+import type {
+  GetTestToSubmitResponse,
+  UploadTestRequest,
+  UploadTestResponse,
+} from '../types/apiTypes';
 
 export const testApi = LLMTestHelperApi.injectEndpoints({
   endpoints: (build) => ({
@@ -14,7 +19,33 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
         testId: response.test_id,
       }),
     }),
+    getTestToSubmit: build.query<FullTestResponse, number>({
+      query: (test_id) => ({ url: `/tests/${test_id}` }),
+      transformResponse: (
+        response: GetTestToSubmitResponse
+      ): FullTestResponse => {
+        console.log(response);
+        const rawData = response;
+        return {
+          test_id: rawData.test_id,
+          uploaded_date: String(rawData.uploaded_date),
+          test_structure: {
+            questions: rawData.test_structure.questions.map((q) => ({
+              id: q.id,
+              question: q.question,
+              type: {
+                type_id: q.type.type_id,
+                description: q.type.description,
+              },
+              required: q.required,
+              options: q.options,
+              answer_mode: q.answer_mode,
+            })),
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useUploadTestMutation } = testApi;
+export const { useUploadTestMutation, useGetTestToSubmitQuery } = testApi;

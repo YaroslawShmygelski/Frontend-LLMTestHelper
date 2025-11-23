@@ -6,10 +6,10 @@ import { useRegisterUserMutation } from '../api/authApi';
 import type { RegisterRequest } from '../types/authTypes';
 import { paths } from '@/utils/paths';
 import { CustomButton } from '@/components/CustomButton';
-import { ErrorAlert } from '@/components/ErrorAlert';
+import { StatusAlert } from '@/components/StatusAlert';
 import { CustomTextField } from './CustomTextField';
 import { CustomPasswordField } from './CustomPasswordField';
-import type { ApiErrorResponse } from '@/types/types';
+import { getErrorMessage } from '../utils/tokenService';
 
 interface FormErrors {
   firstName?: string;
@@ -35,18 +35,6 @@ export const RegisterForm = () => {
 
   const [registerUser, { isLoading }] = useRegisterUserMutation();
   const navigate = useNavigate();
-
-  const getErrorMessage = (error: unknown): string => {
-    if (!error) return 'An unexpected error occurred';
-    const err = error as ApiErrorResponse;
-
-    if (err.data && typeof err.data === 'object') {
-      return err.data.message || err.data.error || 'Registration failed';
-    }
-    if (err.message) return err.message;
-
-    return 'Network error or server unavailable';
-  };
 
   const validate = (): boolean => {
     const errors: FormErrors = {};
@@ -128,7 +116,7 @@ export const RegisterForm = () => {
 
   return (
     <>
-      <ErrorAlert message={globalError} onClose={() => setGlobalError(null)} />
+      <StatusAlert message={globalError} onClose={() => setGlobalError(null)} />
 
       <div className="flex justify-center items-center min-h-[80vh] px-4 py-12">
         {/* Card Container - Wider for grid layout (max-w-2xl) */}

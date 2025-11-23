@@ -14,10 +14,7 @@ interface NavBarProps {
   isLoggedIn?: boolean;
 }
 
-export const NavBar = ({
-  isPrivate = false,
-  isLoggedIn = false,
-}: NavBarProps) => {
+export const NavBar = ({ isLoggedIn = false }: NavBarProps) => {
   const dispatch = useDispatch();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,9 +39,7 @@ export const NavBar = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [menuOpen]);
 
-  const leftLinks: NavItem[] = isPrivate
-    ? [{ label: 'Upload Test', path: paths.auth.login.path }]
-    : [{ label: 'Home', path: paths.home.path }];
+  const leftLinks: NavItem[] = [{ label: 'Home', path: paths.home.path }];
 
   const rightLinks: NavItem[] = !isLoggedIn
     ? [
