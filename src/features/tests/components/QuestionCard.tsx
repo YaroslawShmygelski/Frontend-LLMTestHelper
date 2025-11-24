@@ -31,7 +31,7 @@ export const QuestionCard = ({
 
   const renderInput = () => {
     const commonProps = {
-      value: state.value,
+      state: state,
       onChange: handleValueChange,
       disabled: isInputDisabled,
       options: data.options || [],
@@ -43,19 +43,16 @@ export const QuestionCard = ({
         return <ParagraphInput {...commonProps} value={singleVal || ''} />;
       }
       case 2: {
-        const singleVal = Array.isArray(state.value) ? '' : state.value;
-        return <DropdownInput {...commonProps} value={singleVal || ''} />;
+        return <DropdownInput {...commonProps} state={state} />;
       }
       case 3: {
-        const val = Array.isArray(state.value) ? '' : state.value;
-        return <MultupleChoiceInput {...commonProps} value={val} />;
+        return <MultupleChoiceInput {...commonProps} state={state} />;
       }
       case 4: {
-        const arrayVal = Array.isArray(state.value) ? state.value : [];
         return (
           <CheckboxInput
             {...commonProps}
-            value={arrayVal}
+            state={state}
             onChange={(newVal: string[]) => handleValueChange(newVal)}
           />
         );
