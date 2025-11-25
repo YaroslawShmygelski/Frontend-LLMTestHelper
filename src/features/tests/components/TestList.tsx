@@ -8,6 +8,7 @@ import { useSubmitTestMutation } from '../api/testApi';
 import type { SubmitTestRequest } from '../types/apiTypes';
 import { useStatusAlert } from '@/hooks/useStatusAlert';
 import { StatusAlert } from '@/components/StatusAlert';
+import { Loader } from '@/components/Loader';
 
 interface TestListProps {
   testId: number;
@@ -56,6 +57,10 @@ export const TestList = ({ testId, testStructure }: TestListProps) => {
 
     console.log('Saving Configuration:', answersPayload);
   };
+
+  if (isLoading) {
+    return <Loader fullScreen text="Loading Test Configuration..." />;
+  }
 
   return (
     <>
