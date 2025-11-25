@@ -1,4 +1,4 @@
-import { TestList } from '@/features/tests/components/TestList';
+import { TestContainer } from '@/features/tests/components/TestContainer';
 import { useParams } from 'react-router';
 
 export const TestOverview = () => {
@@ -14,7 +14,7 @@ export const TestOverview = () => {
 
   return (
     <>
-      <TestList testId={numericId} />
+      <TestContainer testId={numericId} />
     </>
   );
 };

@@ -1,21 +1,12 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router';
 import { FiLink, FiUpload, FiCheckCircle } from 'react-icons/fi';
 import { StatusAlert } from '@/components/StatusAlert';
 import { CustomButton } from '@/components/CustomButton';
 import { useUploadTestMutation } from '../api/testApi';
 import type { UploadTestRequest } from '../types/apiTypes';
-
-interface ApiErrorResponse {
-  data?: {
-    message?: string;
-  };
-  status?: number;
-}
+import { useStatusAlert } from '@/hooks/useStatusAlert';
 
 export const TestUploadForm = () => {
-  const navigate = useNavigate();
-
   const [testLink, setTestLink] = useState<string>('');
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -24,36 +15,7 @@ export const TestUploadForm = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [uploadTest, { isLoading, error: apiError }] = useUploadTestMutation();
 
-  const getAlertMessage = () => {
-    if (successTestId) return 'Test uploaded successfully!';
-    if (validationError) return validationError;
-    if (apiError) {
-      const err = apiError as ApiErrorResponse;
-      if (err.data && err.data.message) return err.data.message;
-      return 'Failed to upload test. Server error.';
-    }
-    return null;
-  };
-
-  const getAlertType = () => {
-    if (successTestId) return 'success';
-    return 'error';
-  };
-
-  const handleAlertClose = () => {
-    if (successTestId) {
-      navigate(`/test/${successTestId}`);
-      setSuccessTestId(null);
-    } else {
-      setValidationError(null);
-    }
-  };
-
-  const handleSuccessAction = () => {
-    if (successTestId) {
-      navigate(`/test/${successTestId}`);
-    }
-  };
+  const alert = useStatusAlert(apiError);
 
   const isValidGoogleForm = (url: string) => {
     const pattern = /^(https?:\/\/)?(docs\.google\.com\/forms|forms\.gle)/;
@@ -62,20 +24,19 @@ export const TestUploadForm = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    alert.reset();
 
     if (!testLink.trim()) {
-      setValidationError('Unable to proceed. Please paste a link first.');
+      alert.showError('Unable to proceed. Please paste a link first.');
       return;
     }
 
     if (!isValidGoogleForm(testLink)) {
-      setValidationError('Invalid URL. Please use a valid Google Form link.');
+      alert.showError('Invalid URL. Please use a valid Google Form link.');
       return;
     }
-
     setValidationError(null);
     setSuccessTestId(null);
-
     try {
       const payload: UploadTestRequest = { test_url: testLink };
       const response = await uploadTest(payload).unwrap();
@@ -85,6 +46,7 @@ export const TestUploadForm = () => {
       console.log('Uploaded ID:', newId);
       setTestLink('');
       setSuccessTestId(newId);
+      alert.showSuccess('Test uploaded successfully!');
     } catch (err) {
       console.error('Upload failed:', err);
     }
@@ -93,16 +55,17 @@ export const TestUploadForm = () => {
   return (
     <>
       <StatusAlert
-        message={getAlertMessage()}
-        type={getAlertType()}
-        onClose={handleAlertClose}
+        {...alert.props}
         action={
-          successTestId
-            ? { label: 'Open Test', onClick: handleSuccessAction }
+          alert.isSuccess
+            ? {
+                label: 'Open Test',
+                onClick: () =>
+                  alert.handleSuccessAction(`/test/${successTestId}`),
+              }
             : undefined
         }
       />
-
       <div className="w-full px-4 py-6 sm:py-10 flex justify-center items-center min-h-[60vh]">
         <div className="w-full max-w-3xl bg-card rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-12 border border-card-foreground/10 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 sm:h-2 bg-linear-to-r from-transparent via-card-foreground/20 to-transparent opacity-50" />
@@ -110,12 +73,10 @@ export const TestUploadForm = () => {
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-card-foreground mb-3 sm:mb-4 text-center tracking-tight leading-tight">
               Paste Your Google Form Link
             </h1>
-
             <p className="text-card-foreground/80 mb-6 sm:mb-10 text-center text-sm sm:text-lg max-w-xl leading-relaxed">
               Insert your test link below and our service will process it
               automatically.
             </p>
-
             <form
               onSubmit={handleSubmit}
               noValidate
@@ -128,7 +89,6 @@ export const TestUploadForm = () => {
                 >
                   <FiLink className="text-xl sm:text-2xl" />
                 </div>
-
                 <input
                   type="url"
                   value={testLink}
@@ -148,7 +108,6 @@ export const TestUploadForm = () => {
                   }`}
                 />
               </div>
-
               <CustomButton
                 type="submit"
                 isLoading={isLoading}
@@ -158,7 +117,6 @@ export const TestUploadForm = () => {
                 Upload Test
               </CustomButton>
             </form>
-
             <div className="mt-6 sm:mt-8 flex items-center gap-2 text-xs sm:text-sm text-card-foreground/60 font-medium">
               <FiCheckCircle />
               <span>Secure & Private</span>

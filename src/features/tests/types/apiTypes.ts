@@ -1,3 +1,5 @@
+import type { AnswerMode } from './testTypes';
+
 export interface UploadTestRequest {
   test_url: string;
 }
@@ -23,4 +25,16 @@ export interface GetTestToSubmitResponse {
     ];
   };
   uploaded_date: Date;
+}
+
+export interface SubmitTestRequest {
+  testId: number;
+  payload: {
+    quantity: number | '';
+    answers: {
+      question_id: number;
+      answer_mode: AnswerMode;
+      answer: string | string[] | null;
+    }[];
+  };
 }
