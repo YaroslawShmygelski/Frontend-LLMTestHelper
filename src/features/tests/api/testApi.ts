@@ -20,6 +20,13 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
         testId: response.test_id,
       }),
     }),
+    uploadDocument: build.mutation<void, FormData>({
+      query: (formData) => ({
+        url: '/tests/document/upload',
+        method: 'POST',
+        body: formData,
+      }),
+    }),
     getTestToSubmit: build.query<FullTestResponse, number>({
       query: (testId) => ({ url: `/tests/${testId}` }),
       transformResponse: (
@@ -59,6 +66,7 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
 
 export const {
   useUploadTestMutation,
+  useUploadDocumentMutation,
   useGetTestToSubmitQuery,
   useSubmitTestMutation,
 } = testApi;

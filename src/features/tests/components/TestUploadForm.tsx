@@ -59,10 +59,10 @@ export const TestUploadForm = () => {
         action={
           alert.isSuccess
             ? {
-                label: 'Open Test',
-                onClick: () =>
-                  alert.handleSuccessAction(`/test/${successTestId}`),
-              }
+              label: 'Open Test',
+              onClick: () =>
+                alert.handleSuccessAction(`/test/${successTestId}`),
+            }
             : undefined
         }
       />
@@ -101,11 +101,10 @@ export const TestUploadForm = () => {
                   placeholder="https://docs.google.com/forms/..."
                   className={`w-full h-12 sm:h-16 pl-11 sm:pl-14 pr-4 rounded-xl sm:rounded-2xl border-2 bg-card text-card-foreground 
                   placeholder:text-card-foreground/40 text-base sm:text-xl shadow-sm transition-all duration-300 outline-none
-                  ${
-                    validationError
+                  ${validationError
                       ? 'border-red-500/50 ring-4 ring-red-500/10'
                       : 'border-card-foreground/20 focus:border-card-foreground focus:ring-4 focus:ring-card-foreground/10'
-                  }`}
+                    }`}
                 />
               </div>
               <CustomButton

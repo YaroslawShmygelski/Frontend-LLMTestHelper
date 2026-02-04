@@ -64,7 +64,7 @@ export const QuestionCard = ({
   };
 
   return (
-    <div className="w-full bg-card p-6 rounded-2xl shadow-lg border border-card-foreground/5 transition-all">
+    <div className="w-full bg-card p-6 rounded-2xl shadow-lg border border-card-foreground/5 transition-all hover:border-card-foreground/20">
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">

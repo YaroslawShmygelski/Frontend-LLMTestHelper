@@ -7,6 +7,11 @@ export interface UploadTestResponse {
   testId: number;
 }
 
+export interface UploadDocumentResponse {
+  status: string;
+  filename: string;
+}
+
 export interface GetTestToSubmitResponse {
   test_id: number;
   test_structure: {

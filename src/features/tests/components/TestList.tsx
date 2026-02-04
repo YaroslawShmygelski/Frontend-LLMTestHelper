@@ -4,11 +4,12 @@ import { CustomButton } from '@/components/CustomButton';
 import { type AnswerState, type TestStructure } from '../types/testTypes';
 import { QuantityInput } from './QuantityInput';
 import { FiSave } from 'react-icons/fi';
-import { useSubmitTestMutation } from '../api/testApi';
 import type { SubmitTestRequest } from '../types/apiTypes';
-import { useStatusAlert } from '@/hooks/useStatusAlert';
 import { StatusAlert } from '@/components/StatusAlert';
 import { Loader } from '@/components/Loader';
+import { useSubmitTestMutation } from '../api/testApi';
+import { useStatusAlert } from '@/hooks/useStatusAlert';
+import { DocumentUpload } from './DocumentUpload';
 
 interface TestListProps {
   testId: number;
@@ -25,7 +26,6 @@ export const TestList = ({ testId, testStructure }: TestListProps) => {
   const handleStateChange = (qId: number, newState: AnswerState) => {
     setAnswersState((prev) => ({ ...prev, [qId]: newState }));
   };
-
   const [submitConfig, { isLoading, error: apiError }] =
     useSubmitTestMutation();
 
@@ -90,6 +90,7 @@ export const TestList = ({ testId, testStructure }: TestListProps) => {
             </div>
           </div>
           <div className="flex flex-col gap-6">
+            <DocumentUpload testId={testId} />
             <QuantityInput value={quantity} onChange={setQuantity} />
             {testStructure.questions.map((q) => {
               const fallbackValue = q.type.type_id === 4 ? [] : '';

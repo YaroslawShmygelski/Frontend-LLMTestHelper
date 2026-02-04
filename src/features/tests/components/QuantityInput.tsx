@@ -37,7 +37,7 @@ export const QuantityInput = ({ value, onChange }: QuantityInputProps) => {
     }
   };
   return (
-    <div className="w-full bg-card rounded-xl border-2 border-card-foreground/10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-card-foreground/20">
+    <div className="w-full bg-card rounded-xl border-2 border-card-foreground/5 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-card-foreground/20">
       <div className="flex flex-col gap-2">
         <span className="w-fit text-xs font-bold text-card-foreground/50 uppercase tracking-wider bg-card-foreground/5 px-2.5 py-1 rounded-md">
           Select how many times you want to generate/solve this test.
