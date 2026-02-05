@@ -45,19 +45,19 @@
 
     /* Primary colors */
     --primary: #a855f7; /* Light blue for primary buttons */
-    --primary-dark: #291040;
+    --primary-dark: #371656;
     --primary-foreground: #eff6ff; /* Text on primary buttons in dark mode */
 
     /* Muted / secondary */
     --muted: #0f172a; /* Dark gray background surfaces */
-    --muted-foreground: #94a3b8; /* Gray text on muted surfaces */
+    --muted-foreground: #64748b; /* Gray text on muted surfaces */
 
     /* Borders */
     --border: rgba(107, 114, 128, 0.6); /* Same gray border with 60% opacity */
 
     /* Focus / Highlight */
     --focus: #1e40af; /* Purple-500, consistent with light mode */
-    --focus-dark: #152455;
+    --focus-dark: #050e2b;
 
     /* Placeholder */
     --placeholder: #6b7280; /* Gray-500 placeholder text in dark mode */
