@@ -1,6 +1,7 @@
 import { LLMTestHelperApi } from '@/api/LLMTestHelperApi';
 import type { FullTestResponse } from '../types/testTypes';
 import type {
+  GetTestRunsResponse,
   GetTestToSubmitResponse,
   GetUserTestsResponse,
   SubmitTestRequest,
@@ -76,6 +77,9 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
         },
       }),
     }),
+    getTestRuns: build.query<GetTestRunsResponse, number>({
+      query: (testId) => ({ url: `/tests/${testId}/test-runs` }),
+    }),
   }),
 });
 
@@ -85,4 +89,5 @@ export const {
   useGetTestToSubmitQuery,
   useSubmitTestMutation,
   useGetUserTestsQuery,
+  useGetTestRunsQuery,
 } = testApi;

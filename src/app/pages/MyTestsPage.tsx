@@ -1,4 +1,4 @@
-import { UserTestsList } from '@/features/users/components/UserTestsList';
+import { UserTestsList } from '@/features/tests/components/UserTestsList';
 
 export const MyTestsPage = () => {
   return (

@@ -52,6 +52,7 @@ export interface UserTest {
   type: string;
   title: string;
   url: string;
+  is_submitted: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -60,4 +61,17 @@ export interface GetUserTestsResponse {
   offset: number;
   limit: number;
   tests: UserTest[];
+}
+
+export interface TestRun {
+  run_id: number;
+  test_id: number;
+  user_id: number;
+  job_id: string;
+  submitted_date: string;
+  llm_model: string | null;
+}
+
+export interface GetTestRunsResponse {
+  test_runs: TestRun[];
 }
