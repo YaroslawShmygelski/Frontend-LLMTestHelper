@@ -21,6 +21,8 @@ export interface TestStructure {
 
 export interface FullTestResponse {
   test_id: number;
+  title: string;
+  isSubmitted: boolean;
   test_structure: TestStructure;
   uploaded_date: string;
 }

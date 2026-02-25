@@ -52,6 +52,8 @@ export const TestContainer = ({ testId }: { testId: number }) => {
       key={testId}
       testStructure={data.test_structure}
       testId={testId}
+      title={data.title}
+      isSubmitted={data.isSubmitted}
     />
   );
 };

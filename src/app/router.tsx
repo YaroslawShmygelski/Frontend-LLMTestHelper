@@ -9,6 +9,7 @@ import { ProtectedRoute } from '@/utils/ProtectedRoute';
 import { PublicRoute } from '@/utils/PublicRoute';
 import { TestUpload } from './pages/TestUpload';
 import { TestOverview } from './pages/TestOverview';
+import { MyTestsPage } from './pages/MyTestsPage';
 
 const AppRootErrorBoundary = () => <div> ERROR!</div>;
 
@@ -60,6 +61,17 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Layout>
           <TestOverview />
+        </Layout>
+      </ProtectedRoute>
+    ),
+    ErrorBoundary: AppRootErrorBoundary,
+  },
+  {
+    path: paths.app.myTests.path,
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <MyTestsPage />
         </Layout>
       </ProtectedRoute>
     ),

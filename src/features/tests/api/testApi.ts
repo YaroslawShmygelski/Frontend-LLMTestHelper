@@ -2,6 +2,7 @@ import { LLMTestHelperApi } from '@/api/LLMTestHelperApi';
 import type { FullTestResponse } from '../types/testTypes';
 import type {
   GetTestToSubmitResponse,
+  GetUserTestsResponse,
   SubmitTestRequest,
   UploadTestRequest,
   UploadTestResponse,
@@ -36,6 +37,8 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
         const rawData = response;
         return {
           test_id: rawData.test_id,
+          title: rawData.title,
+          isSubmitted: rawData.is_submitted,
           uploaded_date: String(rawData.uploaded_date),
           test_structure: {
             questions: rawData.test_structure.questions.map((q) => ({
@@ -61,6 +64,18 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
         headers: { 'Content-Type': 'application/json' },
       }),
     }),
+    getUserTests: build.query<
+      GetUserTestsResponse,
+      { offset?: number; limit?: number } | void
+    >({
+      query: (params) => ({
+        url: `/users/tests`,
+        params: {
+          offset: params?.offset ?? 0,
+          limit: params?.limit ?? 20,
+        },
+      }),
+    }),
   }),
 });
 
@@ -69,4 +84,5 @@ export const {
   useUploadDocumentMutation,
   useGetTestToSubmitQuery,
   useSubmitTestMutation,
+  useGetUserTestsQuery,
 } = testApi;

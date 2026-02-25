@@ -43,9 +43,9 @@ export const NavBar = ({ isLoggedIn = false }: NavBarProps) => {
 
   const rightLinks: NavItem[] = !isLoggedIn
     ? [
-        { label: 'Log In', path: paths.auth.login.path },
-        { label: 'Sign Up', path: paths.auth.register.path },
-      ]
+      { label: 'Log In', path: paths.auth.login.path },
+      { label: 'Sign Up', path: paths.auth.register.path },
+    ]
     : [];
 
   return (
@@ -85,10 +85,9 @@ export const NavBar = ({ isLoggedIn = false }: NavBarProps) => {
               <div
                 className={`absolute right-0 mt-2 w-48 bg-card rounded-lg shadow-xl border border-border overflow-hidden
                   origin-top-right transition-all duration-200 ease-out
-                  ${
-                    menuOpen
-                      ? 'opacity-100 scale-100 translate-y-0 visible'
-                      : 'opacity-0 scale-95 -translate-y-2 invisible'
+                  ${menuOpen
+                    ? 'opacity-100 scale-100 translate-y-0 visible'
+                    : 'opacity-0 scale-95 -translate-y-2 invisible'
                   }
                 `}
               >
@@ -104,11 +103,11 @@ export const NavBar = ({ isLoggedIn = false }: NavBarProps) => {
                   </li>
                   <li>
                     <NavLink
-                      to="/settings"
+                      to="/MyTests"
                       className="block px-4 py-2.5 text-sm text-card-foreground hover:bg-muted hover:text-primary transition-colors"
                       onClick={() => setMenuOpen(false)}
                     >
-                      Settings
+                      My Tests
                     </NavLink>
                   </li>
                   <li className="border-t border-border mt-1 pt-1">

@@ -2,6 +2,7 @@ import type { AnswerMode } from './testTypes';
 
 export interface UploadTestRequest {
   test_url: string;
+  title: string;
 }
 export interface UploadTestResponse {
   testId: number;
@@ -14,6 +15,8 @@ export interface UploadDocumentResponse {
 
 export interface GetTestToSubmitResponse {
   test_id: number;
+  title: string;
+  is_submitted: boolean;
   test_structure: {
     questions: [
       {
@@ -42,4 +45,19 @@ export interface SubmitTestRequest {
       answer: string | string[] | null;
     }[];
   };
+}
+
+export interface UserTest {
+  test_id: number;
+  type: string;
+  title: string;
+  url: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GetUserTestsResponse {
+  offset: number;
+  limit: number;
+  tests: UserTest[];
 }

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { FiLink, FiUpload, FiCheckCircle } from 'react-icons/fi';
+import { FiLink, FiUpload, FiCheckCircle, FiTag } from 'react-icons/fi';
 import { StatusAlert } from '@/components/StatusAlert';
 import { CustomButton } from '@/components/CustomButton';
 import { useUploadTestMutation } from '../api/testApi';
@@ -8,11 +8,13 @@ import { useStatusAlert } from '@/hooks/useStatusAlert';
 
 export const TestUploadForm = () => {
   const [testLink, setTestLink] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const [successTestId, setSuccessTestId] = useState<number | null>(null);
 
-  const [isFocused, setIsFocused] = useState(false);
+  const [isLinkFocused, setIsLinkFocused] = useState(false);
+  const [isTitleFocused, setIsTitleFocused] = useState(false);
   const [uploadTest, { isLoading, error: apiError }] = useUploadTestMutation();
 
   const alert = useStatusAlert(apiError);
@@ -26,6 +28,11 @@ export const TestUploadForm = () => {
     e.preventDefault();
     alert.reset();
 
+    if (!title.trim()) {
+      alert.showError('Please enter a title for your test.');
+      return;
+    }
+
     if (!testLink.trim()) {
       alert.showError('Unable to proceed. Please paste a link first.');
       return;
@@ -38,13 +45,14 @@ export const TestUploadForm = () => {
     setValidationError(null);
     setSuccessTestId(null);
     try {
-      const payload: UploadTestRequest = { test_url: testLink };
+      const payload: UploadTestRequest = { test_url: testLink, title: title.trim() };
       const response = await uploadTest(payload).unwrap();
 
       const newId = response.testId;
 
       console.log('Uploaded ID:', newId);
       setTestLink('');
+      setTitle('');
       setSuccessTestId(newId);
       alert.showSuccess('Test uploaded successfully!');
     } catch (err) {
@@ -74,7 +82,7 @@ export const TestUploadForm = () => {
               Paste Your Google Form Link
             </h1>
             <p className="text-card-foreground/80 mb-6 sm:mb-10 text-center text-sm sm:text-lg max-w-xl leading-relaxed">
-              Insert your test link below and our service will process it
+              Insert your test title and link below and our service will process it
               automatically.
             </p>
             <form
@@ -82,10 +90,32 @@ export const TestUploadForm = () => {
               noValidate
               className="w-full max-w-xl flex flex-col gap-4 sm:gap-6"
             >
+              {/* Title input */}
               <div className="relative group">
                 <div
                   className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none transition-colors duration-300 
-                ${isFocused ? 'text-card-foreground' : 'text-card-foreground/50'}`}
+                ${isTitleFocused ? 'text-card-foreground' : 'text-card-foreground/50'}`}
+                >
+                  <FiTag className="text-xl sm:text-2xl" />
+                </div>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  onFocus={() => setIsTitleFocused(true)}
+                  onBlur={() => setIsTitleFocused(false)}
+                  placeholder="Test title..."
+                  className="w-full h-12 sm:h-16 pl-11 sm:pl-14 pr-4 rounded-xl sm:rounded-2xl border-2 bg-card text-card-foreground 
+                  placeholder:text-card-foreground/40 text-base sm:text-xl shadow-sm transition-all duration-300 outline-none
+                  border-card-foreground/20 focus:border-card-foreground focus:ring-4 focus:ring-card-foreground/10"
+                />
+              </div>
+
+              {/* Link input */}
+              <div className="relative group">
+                <div
+                  className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none transition-colors duration-300 
+                ${isLinkFocused ? 'text-card-foreground' : 'text-card-foreground/50'}`}
                 >
                   <FiLink className="text-xl sm:text-2xl" />
                 </div>
@@ -96,8 +126,8 @@ export const TestUploadForm = () => {
                     setTestLink(e.target.value);
                     if (validationError) setValidationError(null);
                   }}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
+                  onFocus={() => setIsLinkFocused(true)}
+                  onBlur={() => setIsLinkFocused(false)}
                   placeholder="https://docs.google.com/forms/..."
                   className={`w-full h-12 sm:h-16 pl-11 sm:pl-14 pr-4 rounded-xl sm:rounded-2xl border-2 bg-card text-card-foreground 
                   placeholder:text-card-foreground/40 text-base sm:text-xl shadow-sm transition-all duration-300 outline-none
@@ -107,6 +137,7 @@ export const TestUploadForm = () => {
                     }`}
                 />
               </div>
+
               <CustomButton
                 type="submit"
                 isLoading={isLoading}
@@ -118,7 +149,7 @@ export const TestUploadForm = () => {
             </form>
             <div className="mt-6 sm:mt-8 flex items-center gap-2 text-xs sm:text-sm text-card-foreground/60 font-medium">
               <FiCheckCircle />
-              <span>Secure & Private</span>
+              <span>Secure &amp; Private</span>
             </div>
           </div>
         </div>

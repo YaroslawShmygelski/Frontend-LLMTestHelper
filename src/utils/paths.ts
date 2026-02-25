@@ -22,5 +22,8 @@ export const paths = {
     profile: {
       path: '/profile',
     },
+    myTests: {
+      path: '/myTests',
+    },
   },
 };

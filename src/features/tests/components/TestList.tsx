@@ -13,10 +13,12 @@ import { DocumentUpload } from './DocumentUpload';
 
 interface TestListProps {
   testId: number;
+  title: string;
+  isSubmitted: boolean;
   testStructure: TestStructure;
 }
 
-export const TestList = ({ testId, testStructure }: TestListProps) => {
+export const TestList = ({ testId, title, testStructure }: TestListProps) => {
   const [quantity, setQuantity] = useState<number | ''>(1);
   const isReadOnly = false;
   const [answersState, setAnswersState] = useState<Record<number, AnswerState>>(
@@ -80,7 +82,7 @@ export const TestList = ({ testId, testStructure }: TestListProps) => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-card-foreground/10 pb-6">
             <div>
               <h1 className="text-3xl sm:text-4xl font-black text-card-foreground">
-                {isReadOnly ? 'Test History' : 'Configure Test Answers'}
+                {title}
               </h1>
               <p className="text-card-foreground/60 mt-2 text-lg">
                 {isReadOnly
