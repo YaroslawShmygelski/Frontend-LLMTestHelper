@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router'; // Убедитесь, что импорт правильный для вашей версии router
+import { NavLink } from 'react-router';
 import { FiUser, FiChevronDown } from 'react-icons/fi';
 
 import { logout } from '@/features/auth/state/authSlice';
+import { useGetUserProfileQuery } from '@/features/users/api/userApi';
 import { paths } from '@/utils/paths';
 import { useTheme } from '@/hooks/useTheme';
 import { ThemeToggler } from './ThemeToggler';
@@ -19,6 +20,10 @@ export const NavBar = ({ isLoggedIn = false }: NavBarProps) => {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const { data: profile } = useGetUserProfileQuery(undefined, {
+    skip: !isLoggedIn,
+  });
 
   const handleLogout = () => {
     setMenuOpen(false);
@@ -74,10 +79,22 @@ export const NavBar = ({ isLoggedIn = false }: NavBarProps) => {
                 aria-expanded={menuOpen}
                 aria-haspopup="true"
               >
-                <div className="p-1.5 bg-muted-foreground rounded-full">
-                  <FiUser className="text-xl" />
-                </div>
-                <span>Profile</span>
+                {profile ? (
+                  <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary to-focus flex items-center justify-center shadow-sm">
+                    <span className="text-xs font-bold text-primary-foreground">
+                      {profile.first_name[0]}{profile.last_name[0]}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="p-1.5 bg-muted-foreground rounded-full">
+                    <FiUser className="text-xl" />
+                  </div>
+                )}
+                <span>
+                  {profile
+                    ? `${profile.first_name} ${profile.last_name}`
+                    : 'Profile'}
+                </span>
                 <FiChevronDown
                   className={`text-lg transition-transform duration-300 ${menuOpen ? 'rotate-180' : 'rotate-0'}`}
                 />

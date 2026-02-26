@@ -113,7 +113,7 @@ export const DocumentUpload = ({ testId }: DocumentUploadProps) => {
                 <CustomButton
                   onClick={handleUploadDocument}
                   isLoading={isDocLoading}
-                  className="!w-auto !h-8 !px-4 text-xs"
+                  className="w-auto! h-8! px-4! text-xs"
                 >
                   Upload
                 </CustomButton>
