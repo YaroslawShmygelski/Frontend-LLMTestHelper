@@ -25,7 +25,7 @@ export const TestRunsDropdown = ({
     <div onClick={onStopPropagation} className="w-full">
       <button
         onClick={handleToggle}
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200 text-xs font-semibold"
+        className="inline-flex items-center gap-1.5 px-8 py-4 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200 text-xs font-semibold"
       >
         <FiList className="w-3.5 h-3.5" />
         Runs

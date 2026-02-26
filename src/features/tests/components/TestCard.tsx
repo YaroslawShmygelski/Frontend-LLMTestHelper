@@ -31,6 +31,10 @@ export const TestCard = ({ test }: { test: UserTest }) => {
       <div className="absolute top-0 left-2 right-2 h-[3px] bg-linear-to-r from-primary to-focus rounded-b-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       {/* Badge */}
       <div className="flex mb-4 justify-between">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
+          <FiFileText className="w-3 h-3" />
+          {getTypeLabel(test.type)}
+        </span>
         <a
           href={test.url}
           target="_blank"
@@ -41,10 +45,6 @@ export const TestCard = ({ test }: { test: UserTest }) => {
           <FiExternalLink className="w-3.5 h-3.5" />
           Open Google Form
         </a>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-          <FiFileText className="w-3 h-3" />
-          {getTypeLabel(test.type)}
-        </span>
       </div>
 
       {/* Title */}

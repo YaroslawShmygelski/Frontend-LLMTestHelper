@@ -25,5 +25,8 @@ export const paths = {
     myTests: {
       path: '/myTests',
     },
+    testRun: {
+      path: '/test-run/:runId',
+    },
   },
 };

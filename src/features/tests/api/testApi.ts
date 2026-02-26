@@ -5,6 +5,7 @@ import type {
   GetTestToSubmitResponse,
   GetUserTestsResponse,
   SubmitTestRequest,
+  TestRunDetailResponse,
   UploadTestRequest,
   UploadTestResponse,
 } from '../types/apiTypes';
@@ -80,6 +81,9 @@ export const testApi = LLMTestHelperApi.injectEndpoints({
     getTestRuns: build.query<GetTestRunsResponse, number>({
       query: (testId) => ({ url: `/tests/${testId}/test-runs` }),
     }),
+    getTestRunDetail: build.query<TestRunDetailResponse, number>({
+      query: (runId) => ({ url: `/tests/test-runs/${runId}` }),
+    }),
   }),
 });
 
@@ -90,4 +94,5 @@ export const {
   useSubmitTestMutation,
   useGetUserTestsQuery,
   useGetTestRunsQuery,
+  useGetTestRunDetailQuery,
 } = testApi;

@@ -75,3 +75,28 @@ export interface TestRun {
 export interface GetTestRunsResponse {
   test_runs: TestRun[];
 }
+
+export interface TestRunQuestion {
+  id: number;
+  question: string;
+  type: {
+    type_id: number;
+    description: string;
+  };
+  required: boolean;
+  options: string[] | null;
+  answer_mode: AnswerMode;
+  user_answer: string | string[] | null;
+  llm_answer: string | string[] | null;
+  random_answer: string | string[] | null;
+}
+
+export interface TestRunDetailResponse {
+  test_id: number;
+  run_id: number;
+  run_content: {
+    questions: TestRunQuestion[];
+  };
+  llm_model: string | null;
+  submitted_date: string;
+}

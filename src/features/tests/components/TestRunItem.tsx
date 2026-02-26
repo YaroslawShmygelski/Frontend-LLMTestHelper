@@ -1,4 +1,5 @@
-import { FiClock, FiCpu } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
+import { FiClock, FiCpu, FiChevronRight } from 'react-icons/fi';
 import type { TestRun } from '../types/apiTypes';
 
 const formatDate = (iso: string) =>
@@ -10,23 +11,37 @@ const formatDate = (iso: string) =>
     minute: '2-digit',
   });
 
-export const TestRunItem = ({ run }: { run: TestRun }) => (
-  <div className="rounded-xl border border-card-foreground/10 bg-card-foreground/5 p-3 flex flex-col gap-2 text-xs">
-    <div className="flex items-center justify-between gap-2">
-      <span className="text-muted-foreground font-medium">
-        Run #{run.run_id}
-      </span>
-      {run.llm_model && (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 font-semibold">
-          <FiCpu className="w-3 h-3" />
-          {run.llm_model}
-        </span>
-      )}
-    </div>
+export const TestRunItem = ({ run }: { run: TestRun }) => {
+  const navigate = useNavigate();
 
-    <div className="flex items-center gap-1.5 text-muted-foreground">
-      <FiClock className="w-3 h-3 shrink-0" />
-      <span>{formatDate(run.submitted_date)}</span>
+  const handleClick = () => {
+    navigate(`/test-run/${run.run_id}`);
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      className="rounded-xl border border-card-foreground/10 bg-card-foreground/5 p-3 flex items-center justify-between gap-3 text-xs cursor-pointer hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+    >
+      <div className="flex flex-col gap-1.5 min-w-0">
+        <span className="text-card-foreground font-semibold">
+          Run #{run.run_id}
+        </span>
+        <span className="inline-flex items-center gap-1 text-muted-foreground">
+          <FiClock className="w-3 h-3 shrink-0" />
+          {formatDate(run.submitted_date)}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-2 shrink-0">
+        {run.llm_model && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 font-semibold">
+            <FiCpu className="w-3 h-3" />
+            {run.llm_model}
+          </span>
+        )}
+        <FiChevronRight className="w-4 h-4 text-muted-foreground" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
